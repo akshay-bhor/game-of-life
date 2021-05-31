@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useRef, useState } from "react";
 
-const tRows = 40;
-const tCols = 100;
+const tRows = 52;
+const tCols = 125;
 
 const operations = [
   [0, 1],
@@ -65,7 +65,7 @@ function App() {
    
     setGrid(gridCopy);
 
-    setTimeout(run, 100);
+    setTimeout(run, 200);
   }, []);
 
   const random = () => {
@@ -114,8 +114,8 @@ function App() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(${tCols}, 15px)`,
-          gridTemplateRows: `repeat(${tRows}, 15px)`,
+          gridTemplateColumns: `repeat(${tCols}, 12px)`,
+          gridTemplateRows: `repeat(${tRows}, 12px)`,
         }}
       >
         {grid.map((rows, i) => {
@@ -125,8 +125,8 @@ function App() {
                 key={`${i}${j}`}
                 onClick={() => select(i, j)}
                 style={{
-                  width: 15,
-                  height: 15,
+                  width: 12,
+                  height: 12,
                   border: "1px solid #ccc",
                   backgroundColor: grid[i][j] ? "black" : undefined,
                 }}

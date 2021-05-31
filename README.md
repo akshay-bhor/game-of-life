@@ -1,6 +1,9 @@
 # React implementation of Conway's Game of Life
 Read More at: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 
+# See live
+https://akshay-bhor.github.io/game-of-life/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
