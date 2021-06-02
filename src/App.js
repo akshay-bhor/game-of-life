@@ -1,4 +1,5 @@
 import { Fragment, useCallback, useRef, useState } from "react";
+import SimulateGame from "./SimulateGame";
 
 const tRows = 52;
 const tCols = 125;
@@ -24,49 +25,36 @@ function App() {
     return rows;
   });
   const [running, setRunning] = useState(false);
+  const [speed, setSpeed] = useState(200);
 
   const runningRef = useRef();
-  const gridRef = useRef();
   runningRef.current = running;
-  gridRef.current = grid;
+  const speedRef = useRef();
+  speedRef.current = speed;
+
+  const run = useCallback(() => { 
+    if (!runningRef.current) return;
+    
+    setGrid(g => {
+
+      // Copy nested array
+      let gridCopy = g.map(arr => {
+        return arr.slice();
+      });
+
+      return (
+        SimulateGame(gridCopy, tRows, tCols, operations)
+      )
+    });
+
+    setTimeout(run, speedRef.current);
+  }, []);
 
   const toggle = () => {
     setRunning((prevState) => !prevState);
     runningRef.current = true;
     run();
   };
-
-  const run = useCallback(() => { 
-    if (!runningRef.current) return;
-    
-    // Copy grid
-    let gridCopy = [...gridRef.current];
-    
-    for(let i = 0; i < tRows; i++) {
-      for(let j = 0; j < tCols; j++) {
-        let neighbors = 0;
-        operations.forEach(([x, y]) => {
-          const nI = i + x;
-          const nJ = j + y;
-
-          if(nI >= 0 && nI < tRows && nJ >= 0 && nJ < tCols) {
-            neighbors += gridRef.current[nI][nJ];
-          }
-        });
-        
-        if(neighbors < 2 || neighbors > 3) { 
-          gridCopy[i][j] = 0;
-        }
-        else if(gridRef.current[i][j] == 0 && neighbors == 3) { 
-          gridCopy[i][j] = 1;
-        }
-      }
-    }
-   
-    setGrid(gridCopy);
-
-    setTimeout(run, 200);
-  }, []);
 
   const random = () => {
     const rows = [];
@@ -110,6 +98,12 @@ function App() {
         <button onClick={toggle}>{running ? "Stop" : "Start"}</button>
         <button onClick={random}>Random</button>
         <button onClick={reset}>Reset</button>
+        <label>Speed:</label>
+        <input type='number' value={speed} onChange={(e) => {
+            if(e.target.value >= 20)
+              setSpeed(e.target.value)
+          }} 
+          name="speed" />
       </div>
       <div
         style={{
